@@ -1,5 +1,8 @@
 import { Pool } from "pg"
 
+// Disable SSL certificate verification for development
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })

@@ -1,11 +1,17 @@
 import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { PostgresAdapter } from "@auth/pg-adapter"
+import PostgresAdapter from "@auth/pg-adapter"
 import { Pool } from "pg"
 import bcrypt from "bcryptjs"
+import fs from "fs"
+import path from "path"
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: {
+    ca: fs.readFileSync(path.join(process.cwd(), "certs", "ca-certificate.crt")).toString(),
+    rejectUnauthorized: false,
+  },
 })
 
 export const authOptions: NextAuthOptions = {
@@ -74,3 +80,5 @@ export const authOptions: NextAuthOptions = {
     signUp: "/auth/signup",
   },
 }
+
+export { pool }
